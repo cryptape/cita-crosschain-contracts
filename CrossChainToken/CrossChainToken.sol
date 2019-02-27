@@ -71,7 +71,7 @@ contract CrossChainToken is ERC20Interface, CrossChainInterface {
      * CrossChain
      */
 
-    function supply(bytes _proof) public returns (bool success) {
+    function issue(bytes _proof) public returns (bool success) {
         address to;
         bytes memory data;
         uint value;
@@ -82,7 +82,7 @@ contract CrossChainToken is ERC20Interface, CrossChainInterface {
         }
         _totalSupply = _totalSupply.add(value);
         _balances[to] = _balances[to].add(value);
-        emit Supply(to, value);
+        emit Issue(to, value);
         return true;
     }
 
