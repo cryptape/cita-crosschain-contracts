@@ -71,25 +71,18 @@ contract CrossChainToken is ERC20Interface, CrossChainInterface {
      * CrossChain
      */
 
-    function issue(bytes _proof) public returns (bool success) {
-        address to;
-        bytes memory data;
-        uint value;
-        data = checkProof(_proof, _dataSize);
-        assembly {
-            to := mload(add(data, 0x20))
-            value := mload(add(data, 0x40))
-        }
+    function issue(address to, uint256 value) onlyOwner public returns (bool success) {
         _totalSupply = _totalSupply.add(value);
         _balances[to] = _balances[to].add(value);
         emit Issue(to, value);
         return true;
     }
 
-    function burn(address _account) public returns (bool success) {
-        _totalSupply = _totalSupply.sub(_balances[_account]);
-        _balances[_account] = 0;
-        emit Burn(_account);
+    function burn() public returns (bool success) {
+        uint256 amount = _balances[msg.sender];
+        _totalSupply = _totalSupply.sub(_balances[msg.sender]);
+        _balances[msg.sender] = 0;
+        emit Burn(msg.sender, amount);
         return true;
     }
 }
